@@ -107,7 +107,7 @@ def mn():
     wel = '# MENU CRACK'
     wel2 = mark(wel, style='yellow')
     sol().print(wel2)
-    mnu = ''' [01] Crack From Friends List
+    mnu = ''' [01] Dump id of public friends
  [02] Crack From Public Account
  [03] Crack From Bulk Account
  [04] Crack From Posts
@@ -213,21 +213,34 @@ class menu:
 			print(' %s[%s!%s] Jangan kosong anj'%(N,M,N));time.sleep(2);menu().main()
 		elif usna in ['1','01']:
 			try:
-				token = open('token.x','r').read()
-			except IOError:
-				os.system('rm -rf token.x')
-				exit(' %s[%s!%s] Cek token kamu'%(N,M,N))
-			try:
-				lmt = input(' %s[%s+%s] Limit id : '%(N,O,N))
-				r = requests.get('https://graph.facebook.com/me?fields=friends.limit(%s)&access_token=%s'%(lmt,token))
-				z = json.loads(r.text)
-				id = []
-				for w in z['friends']['data']:
-					id.append(z['id'] + '<=>' + w['name'])
-			except KeyError:
-				print(' %s[%s!%s] Akun anda tidak publik...'%(N,M,N));time.sleep(2);menu().main()
-			else:
-				crack().fbeh(id)
+				def publik(kontol):
+    try:
+        os.mkdir('dump')
+    except:pass
+    try:
+        csy = raw_input('\n %s[%s?%s] id publik  : '%(N,O,N))
+        ahh = raw_input(' %s[%s?%s] nama file  : '%(N,O,N))
+        ihh = raw_input(' %s[%s?%s] limit id   : '%(N,O,N))
+        knt = ('dump/' + ahh + '.json').replace(' ', '_')
+        xxx = open(knt, 'w')
+        for a in requests.get('https://graph.facebook.com/%s/friends?limit=%s&access_token=%s'%(csy,ihh,kontol)).json()["data"]:
+            id.append(a['name'] + '<=>' + a['id'])
+            xxx.write(a['name'] + '<=>' + a['id'] + '\n')
+            w = random.choice(['\x1b[1;91m', '\x1b[1;92m', '\x1b[1;93m', '\x1b[1;94m', '\x1b[1;95m', '\x1b[1;96m', '\x1b[1;97m', '\x1b[0m'])
+            sys.stdout.write('\r\033[0m - ' + w + '%s%s                                        \r\n\n [\033[0;96m%s\033[0m] [\033[0;91m%s\033[0m] Proses Dump Id...'%(a['name'],N,datetime.now().strftime('%H:%M:%S'), len(id)
+            )); sys.stdout.flush()
+            time.sleep(0.0050)
+
+        xxx.close()
+        jalan('\n\n %s[%s✓%s] berhasil dump id dari teman publik'%(N,H,N))
+        print ' [%s•%s] salin output file 👉 ( %s%s%s )'%(O,N,M,knt,N)
+        print 50 * '-'
+        raw_input(' [%s ENTER%s ] '%(O,N));moch_yayan()
+    except (KeyError,IOError):
+        os.remove(knt)
+        jalan('\n %s[%s!%s] Gagal dump id, kemungkinan id tidaklah publik.\n'%(N,M,N))
+        raw_input(' [ %sKEMBALI%s ] '%(O,N));moch_yayan()
+
 		elif usna in ['2','02']:
 			try:
 				token = open('token.x','r').read()
